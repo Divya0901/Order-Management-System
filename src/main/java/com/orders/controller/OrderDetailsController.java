@@ -13,6 +13,7 @@ import com.orders.service.OrderDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +42,7 @@ public class OrderDetailsController {
         ProductDetails productDetails = productDetailsDao.findProductDetailsByProductId(orderDetailsDTO.getProductId());
         CustomerDetails customerDetails = customerDetailsDao.findCustomerDetailsByCustomerId(orderDetailsDTO.getCustomerId());
         List<OrderDetails> orderDetailsList = orderDetailsDao.findOrderDetailsByCustomerIdAndProductId(customerDetails,productDetails);
-        if(orderDetailsList.size() >= 5) {
+        if(!CollectionUtils.isEmpty(orderDetailsList) && orderDetailsList.size() > 5) {
             responseDTO.setStatus("Success");
             responseDTO.setStatusCode("200");
             responseDTO.setMessage("Order Limit exceeded for this Product by this customerId: " + orderDetailsDTO.getCustomerId());
